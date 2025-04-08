@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xml:id="section-1" xmlns:xi="http://www.w3.org/2001/XInclude">
+  <title>Interactive Elements</title>
+  <introduction>
+    <p>
+      PreTeXt, in addition to having superb accesibility features, also allows for easy inclusion of interactive elements, which can greatly enhance intuition
+      building, provide additional scaffolding, and  allows for unique active or inquiry learning opportunities.
+    </p>
+    <p>
+      Many of these activities were taken from <url href="https://pretextbook.org/examples/sample-article/annotated/section-interactive-authored.html" 
+      visual="https://pretextbook.org/examples/sample-article/annotated/section-interactive-authored.html">PreTeXt sample article</url> who in turn were taken from
+      PreTeXt projects by various authors.  We encourage you to visit this site and peruse the sample interactives for inspiration and as a starting point.
+
+    </p>
+  </introduction>
+  <p>
+    The most basic version of an interactive element is a <url href="https://sagecell.sagemath.org/" >sage cell</url>.
+    We include a sample below, taken from <url href="https://tienchih.github.io/LinearOptimization/sec-simplexsage.html">Linear Optimization: A Geometric Inquiry Course</url>:
+    <sage>
+          <input>
+            %display typeset
+            A = ([8, 2, 4, 5], [-4, 6, 2, 7], [2, 8,4,3])
+            b = (3, 4, 2)
+            c = (1, 3, 2, 1)
+            P = InteractiveLPProblemStandardForm(A, b, c,)
+            P
+          </input>         
+      </sage>
+      Note that subsequent sage cells are allowed to call upon previous entries, allowing for scaffolded activities.
+      <sage>
+            <input>
+              %display typeset
+              P.run_simplex_method()
+            </input>
+      </sage>
+  </p>
+  <p>
+    Sage cells need not neccesarily run sage, they can be written to call upon a <url href="https://pretextbook.org/examples/sample-article/annotated/section-sage-cells.html">a number of languages</url>.
+    Below, we include a simulation in <c>R</c> illustrating the confidence interval.
+    <sage language="r">
+              <input>
+            numsamp=100
+          n=50
+          p=0.23
+
+          samp_phat = rep(NA, numsamp)
+          samp_SE = rep(NA, numsamp)
+          color_vec=rep(NA, numsamp)
+        
+          for(i in 1:numsamp){
+            samp = rbinom(1,n,p) # obtain a sample of size n  from the population
+            samp_phat[i] = samp/n    # Find the proportion for this sample
+            samp_SE[i] = sqrt(samp_phat[i]*(1-samp_phat[i])/n)  # Find the standard error
+          }
+          lower_vector = samp_phat - 1.96 * samp_SE
+          upper_vector = samp_phat + 1.96 * samp_SE
+
+          for (j in 1:numsamp){
+            color_vec[j]="red"
+            if(p>=lower_vector[j] &amp; upper_vector[j]>=p){color_vec[j]="blue"}
+          }
+          plot(c(min(lower_vector),max(upper_vector)), c(0, 1 + numsamp), type = "n")
+          for (i in 1:numsamp) lines( c(lower_vector[i], upper_vector[i]),c(i, i), lwd = 2, col=color_vec[i], add=TRUE)
+          abline(v = p, lwd = 2, lty = 2)
+
+        
+              </input>
+      </sage>
+      R cells may also access data files hosted on github, allowing for interactive explorations of data.  Here, we compare birth weights between mothers who smoke
+      and those who do not, from the <url href="https://www.openintro.org/" >OpenIntro introductory statistics labs</url>.
+      <sage language="r">
+                      <input>
+                      ncbirths = read.csv("https://github.com/TienChih/tbil-stats/raw/main/data/ncbirths.csv")
+                      babysmoke=subset(ncbirths, ncbirths$habit=="smoker")
+                      babynosmoke=subset(ncbirths, ncbirths$habit=="nonsmoker")
+
+                      hist(babynosmoke$weight, col=rgb(0,0,1,0.5), prob=TRUE)
+                      hist(babysmoke$weight, col=rgb(1,0,0,0.5), add=TRUE, prob=TRUE)
+                      abline(v = mean(babysmoke$weight), col="red", lwd=3, lty=2)
+                      abline(v = mean(babynosmoke$weight), col="blue", lwd=3, lty=2)
+          
+                      </input>
+                      </sage>                
+  </p>
+  <p>
+          <url href="https://doenet.org">DoenetML</url>
+          is a markup language inspired by <pretext /> for semantically describing interactive mathematics applets for the web.
+          Use <c>interactive[@platform="doenetml"]</c> with a <c>slate[@surface="doenetml"]</c> to include DoenetML content within your document.
+  </p>
+  <p>
+    We include a Doenet acivity below illustrating the determinant geometrically from the <url href="https://library.tbil.org/2024/linear-algebra/GT1.html">
+    Team Based Inquiry Learning: Linear Algebra</url>.
+  </p>
+  <interactive label="interactive-doenetml-example" platform="doenetml" width="100%" aspect="3:2">
+<slate surface="doenetml">
+&lt;p&gt;
+Adjust the vectors &lt;m&gt;\vec u&lt;/m&gt;, &lt;m&gt;\vec v&lt;/m&gt;, and &lt;m&gt;\vec w&lt;/m&gt; in the
+left graph to visualize the areas calculated by
+&lt;m&gt;\det[\vec u\hspace{0.5em}\vec w]&lt;/m&gt;, &lt;m&gt;\det[\vec v\hspace{0.5em}\vec w]&lt;/m&gt;,
+and
+&lt;m&gt;\det[\vec u+\vec v\hspace{0.5em}\vec w]&lt;/m&gt;.
+&lt;/p&gt;
+&lt;setup&gt;&lt;line through="(0,0) $v" name="vLine"/&gt;&lt;math simplify  name="c"&gt;$cv.x/$v.x&lt;/math&gt;&lt;/setup&gt;
+&lt;sideBySide&gt;
+&lt;graph xmin="-4" ymin="-4" xmax="16" ymax="16"&gt;
+&lt;m draggable="false" anchor="(10,14)"&gt;
+\det[\vec u\hspace{0.5em}\vec w],
+\det[\vec v\hspace{0.5em}\vec w]
+&lt;/m&gt;
+&lt;point name="u" styleNumber="3"&gt;
+(6,2)
+&lt;label&gt;&lt;m&gt;\vec u&lt;/m&gt;&lt;/label&gt;
+&lt;/point&gt;
+&lt;point name="w" styleNumber="3"&gt;
+(3,7)
+&lt;label&gt;&lt;m&gt;\vec w&lt;/m&gt;&lt;/label&gt;
+&lt;/point&gt;
+&lt;point name="uPlusV" styleNumber="4"&gt;
+(9,5)
+&lt;label&gt;&lt;m&gt;\vec v&lt;/m&gt;&lt;/label&gt;
+&lt;/point&gt;
+&lt;polygon vertices="(0,0) $u $u+$w $w" filled draggable="false" styleNumber="3"/&gt;
+&lt;polygon vertices="$u $uPlusV $uPlusV+$w $u+$w" filled draggable="false" styleNumber="4"/&gt;
+&lt;lineSegment endpoints="(0,0) $uPlusV" styleNumber="6"/&gt;
+&lt;lineSegment endpoints="$w $uPlusV+$w" styleNumber="6"/&gt;
+&lt;/graph&gt;
+&lt;graph xmin="-4" ymin="-4" xmax="16" ymax="16"&gt;
+&lt;m draggable="false" anchor="(12,14)"&gt;
+\det[\vec u+\vec v\hspace{0.5em}\vec w]
+&lt;/m&gt;
+&lt;polygon vertices="(0,0) $uPlusV $uPlusV+$w $w" filled draggable="false" styleNumber="2"/&gt;
+&lt;point draggable="false" styleNumber="3"&gt;
+$w
+&lt;label&gt;&lt;m&gt;\vec w&lt;/m&gt;&lt;/label&gt;
+&lt;/point&gt;
+&lt;point draggable="false" styleNumber="4"&gt;
+$uPlusV
+&lt;label&gt;&lt;m&gt;\vec u+\vec v&lt;/m&gt;&lt;/label&gt;
+&lt;/point&gt;
+&lt;lineSegment endpoints="(0,0) $u" styleNumber="6"/&gt;
+&lt;lineSegment endpoints="$u $uPlusV" styleNumber="6"/&gt;
+&lt;lineSegment endpoints="$w $w+$u" styleNumber="6"/&gt;
+&lt;lineSegment endpoints="$w+$u $w+$uPlusV" styleNumber="6"/&gt;
+&lt;/graph&gt;
+&lt;/sideBySide&gt;
+</slate>
+          </interactive>
+
+
+  <p>
+    Proofs can be challenging to incorporate in an active or inquiry course, as typically
+    this is a lengthy activity done outside of class time when done by students.  Interactive elements such as 
+    <q>drag and drop </q> proofs can help with the scaffolding and allow for easier inclusion.
+    The following example is taken <url href="https://pretextbook.org/examples/sample-article/annotated/section-interactive-exercises.html">
+    from the sample article</url>.
+  </p>
+  <exercises>
+  <exercise label="number-theory-proof" adaptive="yes">
+    <title>Parsons Problem, Mathematical Proof</title>
+    <idx>even numbers</idx>
+    <statement>
+      <p>
+        Create a proof of the theorem: If <m>n</m> is an even number,
+        then <m>n\equiv 0\mod 2</m>.
+      </p>
+    </statement>
+    <blocks>
+    <block order="2">
+    <p>
+      Suppose <m>n</m> is even.
+    </p>
+    </block>
+    <block order="3">
+    <choice>
+    <p>
+      Then <m>n</m> is a prime number.
+    </p>
+    </choice>
+    <choice correct="yes">
+    <p>
+      Then there exists an <m>m</m> so that <m>n = 2m</m>.
+    </p>
+    </choice>
+    <choice>
+    <p>
+      Then there exists an <m>m</m> so that <m>n = 2m + 1</m>.
+    </p>
+    </choice>
+    </block>
+    <block order="1" correct="no">
+    <p>
+      Click the heels of your ruby slippers together three times.
+    </p>
+    </block>
+    <block order="5">
+    <p>
+      So we have the displayed equation:
+      <me>
+        n = 2m + 0
+      </me>.
+    </p>
+    <p>
+      This is a superfluous second paragraph in this block.
+    </p>
+    </block>
+    <block order="4">
+    <p>
+      Thus <m>n\equiv 0\mod 2</m>.
+    </p>
+    </block>
+    </blocks>
+    <hint>
+      <p>
+        Dorothy will not be much help with this proof.
+      </p>
+    </hint>
+  </exercise>
+</exercises>
+
+<p>
+  Finally, many authors have already written <url href="https://www.desmos.com/">Desmos</url>
+  or <url href="https://www.geogebra.org/">Geogebra</url> or similar interactives for students.
+  These can easily be included into PreTeXt as well.
+</p>
+<interactive desmos="jyhgnzacnq" width="100%" aspect="3:2" />
+
+  
+</section>

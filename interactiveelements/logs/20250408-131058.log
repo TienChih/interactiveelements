@@ -1,0 +1,12 @@
+ERROR   : View encountered an error.  Please report this: process 11233 with laddr 
+ERROR   : View encountered an error.  Please report this: process 11233 with laddr 
+ERROR   : View encountered an error.  Please report this: process 11233 with laddr 
+INFO    : Found server at localhost:8128
+INFO    : Server is already available at https://bug-free-garbanzo-779qg66rjw5hrw95-8128.app.github.dev
+INFO    : Now opening browser for target `web` at https://bug-free-garbanzo-779qg66rjw5hrw95-8128.app.github.dev/output/web
+INFO    : 
+----------------------------------------------------
+INFO    : While running pretext, the following errors occurred:
+
+INFO    : (see log messages above or in the 'logs' folder for more information)
+INFO    : ----------------------------------------------------
