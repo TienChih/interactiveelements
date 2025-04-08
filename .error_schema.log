@@ -1,5 +1,5 @@
-/workspaces/interactiveelements/interactiveelements/source/main.ptx:9:0:ERROR:RELAXNGV:RELAXNG_ERR_ELEMNAME: Expecting element titlepage, got abstract
-/workspaces/interactiveelements/interactiveelements/source/main.ptx:2:0:ERROR:RELAXNGV:RELAXNG_ERR_ELEMWRONG: Did not expect element frontmatter there
-/workspaces/interactiveelements/interactiveelements/source/main.ptx:2:0:ERROR:RELAXNGV:RELAXNG_ERR_ELEMNAME: Expecting element sidebyside, got frontmatter
-/workspaces/interactiveelements/interactiveelements/source/main.ptx:2:0:ERROR:RELAXNGV:RELAXNG_ERR_ELEMNAME: Expecting element proof, got frontmatter
-/workspaces/interactiveelements/interactiveelements/source/main.ptx:2:0:ERROR:RELAXNGV:RELAXNG_ERR_ELEMNAME: Expecting element exercise, got frontmatter
+/workspaces/interactiveelements/source/main.ptx:9:0:ERROR:RELAXNGV:RELAXNG_ERR_ELEMNAME: Expecting element titlepage, got abstract
+/workspaces/interactiveelements/source/main.ptx:2:0:ERROR:RELAXNGV:RELAXNG_ERR_ELEMWRONG: Did not expect element frontmatter there
+/workspaces/interactiveelements/source/main.ptx:2:0:ERROR:RELAXNGV:RELAXNG_ERR_ELEMNAME: Expecting element sidebyside, got frontmatter
+/workspaces/interactiveelements/source/main.ptx:2:0:ERROR:RELAXNGV:RELAXNG_ERR_ELEMNAME: Expecting element proof, got frontmatter
+/workspaces/interactiveelements/source/main.ptx:2:0:ERROR:RELAXNGV:RELAXNG_ERR_ELEMNAME: Expecting element exercise, got frontmatter
