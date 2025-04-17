@@ -111,7 +111,7 @@ eBookConfig.allow_pairs = false;
 eBookConfig.enableScratchAC = false;
 eBookConfig.build_info = "";
 eBookConfig.python3 = null;
-eBookConfig.runestone_version = '7.5.15';
+eBookConfig.runestone_version = '7.5.16';
 eBookConfig.jobehost = '';
 eBookConfig.proxyuri_runs = '';
 eBookConfig.proxyuri_files = '';
@@ -185,7 +185,233 @@ sagecell.makeSagecell({
 <main class="ptx-main"><div id="ptx-content" class="ptx-content"><section xmlns:xlink="http://www.w3.org/1999/xlink" class="section" id="section-1"><h2 class="heading hide-type">
 <span class="type">Section</span><span class="space"> </span><span class="codenumber">1</span><span class="space"> </span><span class="title">Interactive Elements</span>
 </h2>
-<section class="introduction" id="section-1-2"><div class="para" id="section-1-2-1">PreTeXt, in addition to having superb accesibility features, also allows for easy inclusion of interactive elements, which can greatly enhance intuition building, provide additional scaffolding, and  allows for unique active or inquiry learning opportunities.</div>
+<details class="source-view"><summary class="source-view__link" data-reveal-label="Open" data-close-label="Close">View Source for section</summary><article class="view-source-view__content"><pre><code class="language-xml">&lt;section xml:id="section-1"&gt;
+  &lt;title&gt;Interactive Elements&lt;/title&gt;
+  &lt;introduction&gt;
+    &lt;p&gt;
+      PreTeXt, in addition to having superb accesibility features, also allows for easy inclusion of interactive elements, which can greatly enhance intuition
+      building, provide additional scaffolding, and  allows for unique active or inquiry learning opportunities.
+    &lt;/p&gt;
+    &lt;p&gt;
+      Many of these activities were taken from &lt;url href="https://pretextbook.org/examples/sample-article/annotated/section-interactive-authored.html" visual="https://pretextbook.org/examples/sample-article/annotated/section-interactive-authored.html"&gt;PreTeXt sample article&lt;/url&gt; who in turn were taken from
+      PreTeXt projects by various authors.  We encourage you to visit this site and peruse the sample interactives for inspiration and as a starting point.
+
+    &lt;/p&gt;
+  &lt;/introduction&gt;
+  &lt;p&gt;
+    The most basic version of an interactive element is a &lt;url href="https://sagecell.sagemath.org/"&gt;sage cell&lt;/url&gt;.
+    We include a sample below, taken from &lt;url href="https://tienchih.github.io/LinearOptimization/sec-simplexsage.html"&gt;Linear Optimization: A Geometric Inquiry Course&lt;/url&gt;:
+    &lt;sage&gt;
+          &lt;input&gt;
+            %display typeset
+            A = ([8, 2, 4, 5], [-4, 6, 2, 7], [2, 8,4,3])
+            b = (3, 4, 2)
+            c = (1, 3, 2, 1)
+            P = InteractiveLPProblemStandardForm(A, b, c,)
+            P
+          &lt;/input&gt;         
+      &lt;/sage&gt;
+      Note that subsequent sage cells are allowed to call upon previous entries, allowing for scaffolded activities.
+      &lt;sage&gt;
+            &lt;input&gt;
+              %display typeset
+              P.run_simplex_method()
+            &lt;/input&gt;
+      &lt;/sage&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    Sage cells need not neccesarily run sage, they can be written to call upon a &lt;url href="https://pretextbook.org/examples/sample-article/annotated/section-sage-cells.html"&gt;a number of languages&lt;/url&gt;.
+    Below, we include a simulation in &lt;c&gt;R&lt;/c&gt; illustrating the confidence interval.
+    &lt;sage language="r"&gt;
+              &lt;input&gt;
+            numsamp=100
+          n=50
+          p=0.23
+
+          samp_phat = rep(NA, numsamp)
+          samp_SE = rep(NA, numsamp)
+          color_vec=rep(NA, numsamp)
+        
+          for(i in 1:numsamp){
+            samp = rbinom(1,n,p) # obtain a sample of size n  from the population
+            samp_phat[i] = samp/n    # Find the proportion for this sample
+            samp_SE[i] = sqrt(samp_phat[i]*(1-samp_phat[i])/n)  # Find the standard error
+          }
+          lower_vector = samp_phat - 1.96 * samp_SE
+          upper_vector = samp_phat + 1.96 * samp_SE
+
+          for (j in 1:numsamp){
+            color_vec[j]="red"
+            if(p&amp;gt;=lower_vector[j] &amp;amp; upper_vector[j]&amp;gt;=p){color_vec[j]="blue"}
+          }
+          plot(c(min(lower_vector),max(upper_vector)), c(0, 1 + numsamp), type = "n")
+          for (i in 1:numsamp) lines( c(lower_vector[i], upper_vector[i]),c(i, i), lwd = 2, col=color_vec[i], add=TRUE)
+          abline(v = p, lwd = 2, lty = 2)
+
+        
+              &lt;/input&gt;
+      &lt;/sage&gt;
+      R cells may also access data files hosted on github, allowing for interactive explorations of data.  Here, we compare birth weights between mothers who smoke
+      and those who do not, from the &lt;url href="https://www.openintro.org/"&gt;OpenIntro introductory statistics labs&lt;/url&gt;.
+      &lt;sage language="r"&gt;
+                      &lt;input&gt;
+                      ncbirths = read.csv("https://github.com/TienChih/tbil-stats/raw/main/data/ncbirths.csv")
+                      babysmoke=subset(ncbirths, ncbirths$habit=="smoker")
+                      babynosmoke=subset(ncbirths, ncbirths$habit=="nonsmoker")
+
+                      hist(babynosmoke$weight, col=rgb(0,0,1,0.5), prob=TRUE)
+                      hist(babysmoke$weight, col=rgb(1,0,0,0.5), add=TRUE, prob=TRUE)
+                      abline(v = mean(babysmoke$weight), col="red", lwd=3, lty=2)
+                      abline(v = mean(babynosmoke$weight), col="blue", lwd=3, lty=2)
+          
+                      &lt;/input&gt;
+                      &lt;/sage&gt;                
+  &lt;/p&gt;
+  &lt;p&gt;
+          &lt;url href="https://doenet.org"&gt;DoenetML&lt;/url&gt;
+          is a markup language inspired by &lt;pretext /&gt; for semantically describing interactive mathematics applets for the web.
+          Use &lt;c&gt;interactive[@platform="doenetml"]&lt;/c&gt; with a &lt;c&gt;slate[@surface="doenetml"]&lt;/c&gt; to include DoenetML content within your document.
+  &lt;/p&gt;
+  &lt;p&gt;
+    We include a Doenet acivity below illustrating the determinant geometrically from the &lt;url href="https://library.tbil.org/2024/linear-algebra/GT1.html"&gt;
+    Team Based Inquiry Learning: Linear Algebra&lt;/url&gt;.
+  &lt;/p&gt;
+  &lt;interactive label="interactive-doenetml-example" platform="doenetml" width="100%" aspect="3:2"&gt;
+&lt;slate surface="doenetml"&gt;
+&amp;lt;p&amp;gt;
+Adjust the vectors &amp;lt;m&amp;gt;\vec u&amp;lt;/m&amp;gt;, &amp;lt;m&amp;gt;\vec v&amp;lt;/m&amp;gt;, and &amp;lt;m&amp;gt;\vec w&amp;lt;/m&amp;gt; in the
+left graph to visualize the areas calculated by
+&amp;lt;m&amp;gt;\det[\vec u\hspace{0.5em}\vec w]&amp;lt;/m&amp;gt;, &amp;lt;m&amp;gt;\det[\vec v\hspace{0.5em}\vec w]&amp;lt;/m&amp;gt;,
+and
+&amp;lt;m&amp;gt;\det[\vec u+\vec v\hspace{0.5em}\vec w]&amp;lt;/m&amp;gt;.
+&amp;lt;/p&amp;gt;
+&amp;lt;setup&amp;gt;&amp;lt;line through="(0,0) $v" name="vLine"/&amp;gt;&amp;lt;math simplify  name="c"&amp;gt;$cv.x/$v.x&amp;lt;/math&amp;gt;&amp;lt;/setup&amp;gt;
+&amp;lt;sideBySide&amp;gt;
+&amp;lt;graph xmin="-4" ymin="-4" xmax="16" ymax="16"&amp;gt;
+&amp;lt;m draggable="false" anchor="(10,14)"&amp;gt;
+\det[\vec u\hspace{0.5em}\vec w],
+\det[\vec v\hspace{0.5em}\vec w]
+&amp;lt;/m&amp;gt;
+&amp;lt;point name="u" styleNumber="3"&amp;gt;
+(6,2)
+&amp;lt;label&amp;gt;&amp;lt;m&amp;gt;\vec u&amp;lt;/m&amp;gt;&amp;lt;/label&amp;gt;
+&amp;lt;/point&amp;gt;
+&amp;lt;point name="w" styleNumber="3"&amp;gt;
+(3,7)
+&amp;lt;label&amp;gt;&amp;lt;m&amp;gt;\vec w&amp;lt;/m&amp;gt;&amp;lt;/label&amp;gt;
+&amp;lt;/point&amp;gt;
+&amp;lt;point name="uPlusV" styleNumber="4"&amp;gt;
+(9,5)
+&amp;lt;label&amp;gt;&amp;lt;m&amp;gt;\vec v&amp;lt;/m&amp;gt;&amp;lt;/label&amp;gt;
+&amp;lt;/point&amp;gt;
+&amp;lt;polygon vertices="(0,0) $u $u+$w $w" filled draggable="false" styleNumber="3"/&amp;gt;
+&amp;lt;polygon vertices="$u $uPlusV $uPlusV+$w $u+$w" filled draggable="false" styleNumber="4"/&amp;gt;
+&amp;lt;lineSegment endpoints="(0,0) $uPlusV" styleNumber="6"/&amp;gt;
+&amp;lt;lineSegment endpoints="$w $uPlusV+$w" styleNumber="6"/&amp;gt;
+&amp;lt;/graph&amp;gt;
+&amp;lt;graph xmin="-4" ymin="-4" xmax="16" ymax="16"&amp;gt;
+&amp;lt;m draggable="false" anchor="(12,14)"&amp;gt;
+\det[\vec u+\vec v\hspace{0.5em}\vec w]
+&amp;lt;/m&amp;gt;
+&amp;lt;polygon vertices="(0,0) $uPlusV $uPlusV+$w $w" filled draggable="false" styleNumber="2"/&amp;gt;
+&amp;lt;point draggable="false" styleNumber="3"&amp;gt;
+$w
+&amp;lt;label&amp;gt;&amp;lt;m&amp;gt;\vec w&amp;lt;/m&amp;gt;&amp;lt;/label&amp;gt;
+&amp;lt;/point&amp;gt;
+&amp;lt;point draggable="false" styleNumber="4"&amp;gt;
+$uPlusV
+&amp;lt;label&amp;gt;&amp;lt;m&amp;gt;\vec u+\vec v&amp;lt;/m&amp;gt;&amp;lt;/label&amp;gt;
+&amp;lt;/point&amp;gt;
+&amp;lt;lineSegment endpoints="(0,0) $u" styleNumber="6"/&amp;gt;
+&amp;lt;lineSegment endpoints="$u $uPlusV" styleNumber="6"/&amp;gt;
+&amp;lt;lineSegment endpoints="$w $w+$u" styleNumber="6"/&amp;gt;
+&amp;lt;lineSegment endpoints="$w+$u $w+$uPlusV" styleNumber="6"/&amp;gt;
+&amp;lt;/graph&amp;gt;
+&amp;lt;/sideBySide&amp;gt;
+&lt;/slate&gt;
+          &lt;/interactive&gt;
+
+
+  &lt;p&gt;
+    Proofs can be challenging to incorporate in an active or inquiry course, as typically
+    this is a lengthy activity done outside of class time when done by students.  Interactive elements such as 
+    &lt;q&gt;drag and drop &lt;/q&gt; proofs can help with the scaffolding and allow for easier inclusion.
+    The following example is taken &lt;url href="https://pretextbook.org/examples/sample-article/annotated/section-interactive-exercises.html"&gt;
+    from the sample article&lt;/url&gt;.
+  &lt;/p&gt;
+  &lt;exercises&gt;
+  &lt;exercise label="number-theory-proof" adaptive="yes"&gt;
+    &lt;title&gt;Parsons Problem, Mathematical Proof&lt;/title&gt;
+    &lt;idx&gt;even numbers&lt;/idx&gt;
+    &lt;statement&gt;
+      &lt;p&gt;
+        Create a proof of the theorem: If &lt;m&gt;n&lt;/m&gt; is an even number,
+        then &lt;m&gt;n\equiv 0\mod 2&lt;/m&gt;.
+      &lt;/p&gt;
+    &lt;/statement&gt;
+    &lt;blocks&gt;
+    &lt;block order="2"&gt;
+    &lt;p&gt;
+      Suppose &lt;m&gt;n&lt;/m&gt; is even.
+    &lt;/p&gt;
+    &lt;/block&gt;
+    &lt;block order="3"&gt;
+    &lt;choice&gt;
+    &lt;p&gt;
+      Then &lt;m&gt;n&lt;/m&gt; is a prime number.
+    &lt;/p&gt;
+    &lt;/choice&gt;
+    &lt;choice correct="yes"&gt;
+    &lt;p&gt;
+      Then there exists an &lt;m&gt;m&lt;/m&gt; so that &lt;m&gt;n = 2m&lt;/m&gt;.
+    &lt;/p&gt;
+    &lt;/choice&gt;
+    &lt;choice&gt;
+    &lt;p&gt;
+      Then there exists an &lt;m&gt;m&lt;/m&gt; so that &lt;m&gt;n = 2m + 1&lt;/m&gt;.
+    &lt;/p&gt;
+    &lt;/choice&gt;
+    &lt;/block&gt;
+    &lt;block order="1" correct="no"&gt;
+    &lt;p&gt;
+      Click the heels of your ruby slippers together three times.
+    &lt;/p&gt;
+    &lt;/block&gt;
+    &lt;block order="5"&gt;
+    &lt;p&gt;
+      So we have the displayed equation:
+      &lt;me&gt;
+        n = 2m + 0
+      &lt;/me&gt;.
+    &lt;/p&gt;
+    &lt;p&gt;
+      This is a superfluous second paragraph in this block.
+    &lt;/p&gt;
+    &lt;/block&gt;
+    &lt;block order="4"&gt;
+    &lt;p&gt;
+      Thus &lt;m&gt;n\equiv 0\mod 2&lt;/m&gt;.
+    &lt;/p&gt;
+    &lt;/block&gt;
+    &lt;/blocks&gt;
+    &lt;hint&gt;
+      &lt;p&gt;
+        Dorothy will not be much help with this proof.
+      &lt;/p&gt;
+    &lt;/hint&gt;
+  &lt;/exercise&gt;
+&lt;/exercises&gt;
+
+&lt;p&gt;
+  Finally, many authors have already written &lt;url href="https://www.desmos.com/"&gt;Desmos&lt;/url&gt;
+  or &lt;url href="https://www.geogebra.org/"&gt;Geogebra&lt;/url&gt; or similar interactives for students.
+  These can easily be included into PreTeXt as well.
+&lt;/p&gt;
+&lt;interactive desmos="jyhgnzacnq" width="100%" aspect="3:2" /&gt;
+
+  
+&lt;/section&gt;
+</code></pre></article></details><section class="introduction" id="section-1-2"><div class="para" id="section-1-2-1">PreTeXt, in addition to having superb accesibility features, also allows for easy inclusion of interactive elements, which can greatly enhance intuition building, provide additional scaffolding, and  allows for unique active or inquiry learning opportunities.</div>
 <div class="para" id="section-1-2-2">Many of these activities were taken from <a class="external" href="https://pretextbook.org/examples/sample-article/annotated/section-interactive-authored.html" target="_blank">PreTeXt sample article</a><details class="ptx-footnote" aria-live="polite" id="section-1-2-2-2"><summary class="ptx-footnote__number" title="Footnote 1.1"><sup> 1 </sup></summary><div class="ptx-footnote__contents" id="section-1-2-2-2"><code class="code-inline tex2jax_ignore">https://pretextbook.org/examples/sample-article/annotated/section-interactive-authored.html</code></div></details> who in turn were taken from PreTeXt projects by various authors.  We encourage you to visit this site and peruse the sample interactives for inspiration and as a starting point.</div></section><div class="para" id="section-1-3">The most basic version of an interactive element is a <a class="external" href="https://sagecell.sagemath.org/" target="_blank">sage cell</a><details class="ptx-footnote" aria-live="polite" id="section-1-3-2"><summary class="ptx-footnote__number" title="Footnote 1.2"><sup> 2 </sup></summary><div class="ptx-footnote__contents" id="section-1-3-2"><code class="code-inline tex2jax_ignore">sagecell.sagemath.org/</code></div></details>. We include a sample below, taken from <a class="external" href="https://tienchih.github.io/LinearOptimization/sec-simplexsage.html" target="_blank">Linear Optimization: A Geometric Inquiry Course</a><details class="ptx-footnote" aria-live="polite" id="section-1-3-4"><summary class="ptx-footnote__number" title="Footnote 1.3"><sup> 3 </sup></summary><div class="ptx-footnote__contents" id="section-1-3-4"><code class="code-inline tex2jax_ignore">tienchih.github.io/LinearOptimization/sec-simplexsage.html</code></div></details>: <div id="section-1-3-5" class="ptx-sagecell sagecell-sage"><script type="text/x-sage">%display typeset
 A = ([8, 2, 4, 5], [-4, 6, 2, 7], [2, 8,4,3])
 b = (3, 4, 2)
@@ -236,10 +462,132 @@ abline(v = mean(babynosmoke$weight), col="blue", lwd=3, lty=2)
 <section class="exercises" id="section-1-9"><h3 class="heading hide-type">
 <span class="type">Exercises</span><span class="space"> </span><span class="codenumber"></span><span class="space"> </span><span class="title">Exercises</span>
 </h3>
-<article class="exercise exercise-like" id="number-theory-proof"><h4 class="heading">
+<details class="source-view"><summary class="source-view__link" data-reveal-label="Open" data-close-label="Close">View Source for exercises</summary><article class="view-source-view__content"><pre><code class="language-xml">&lt;exercises&gt;
+  &lt;exercise label="number-theory-proof" adaptive="yes"&gt;
+    &lt;title&gt;Parsons Problem, Mathematical Proof&lt;/title&gt;
+    &lt;idx&gt;even numbers&lt;/idx&gt;
+    &lt;statement&gt;
+      &lt;p&gt;
+        Create a proof of the theorem: If &lt;m&gt;n&lt;/m&gt; is an even number,
+        then &lt;m&gt;n\equiv 0\mod 2&lt;/m&gt;.
+      &lt;/p&gt;
+    &lt;/statement&gt;
+    &lt;blocks&gt;
+    &lt;block order="2"&gt;
+    &lt;p&gt;
+      Suppose &lt;m&gt;n&lt;/m&gt; is even.
+    &lt;/p&gt;
+    &lt;/block&gt;
+    &lt;block order="3"&gt;
+    &lt;choice&gt;
+    &lt;p&gt;
+      Then &lt;m&gt;n&lt;/m&gt; is a prime number.
+    &lt;/p&gt;
+    &lt;/choice&gt;
+    &lt;choice correct="yes"&gt;
+    &lt;p&gt;
+      Then there exists an &lt;m&gt;m&lt;/m&gt; so that &lt;m&gt;n = 2m&lt;/m&gt;.
+    &lt;/p&gt;
+    &lt;/choice&gt;
+    &lt;choice&gt;
+    &lt;p&gt;
+      Then there exists an &lt;m&gt;m&lt;/m&gt; so that &lt;m&gt;n = 2m + 1&lt;/m&gt;.
+    &lt;/p&gt;
+    &lt;/choice&gt;
+    &lt;/block&gt;
+    &lt;block order="1" correct="no"&gt;
+    &lt;p&gt;
+      Click the heels of your ruby slippers together three times.
+    &lt;/p&gt;
+    &lt;/block&gt;
+    &lt;block order="5"&gt;
+    &lt;p&gt;
+      So we have the displayed equation:
+      &lt;me&gt;
+        n = 2m + 0
+      &lt;/me&gt;.
+    &lt;/p&gt;
+    &lt;p&gt;
+      This is a superfluous second paragraph in this block.
+    &lt;/p&gt;
+    &lt;/block&gt;
+    &lt;block order="4"&gt;
+    &lt;p&gt;
+      Thus &lt;m&gt;n\equiv 0\mod 2&lt;/m&gt;.
+    &lt;/p&gt;
+    &lt;/block&gt;
+    &lt;/blocks&gt;
+    &lt;hint&gt;
+      &lt;p&gt;
+        Dorothy will not be much help with this proof.
+      &lt;/p&gt;
+    &lt;/hint&gt;
+  &lt;/exercise&gt;
+&lt;/exercises&gt;
+</code></pre></article></details><article class="exercise exercise-like" id="number-theory-proof"><h4 class="heading">
 <span class="codenumber">1<span class="period">.</span></span><span class="space"> </span><span class="title">Parsons Problem, Mathematical Proof.</span>
 </h4>
-<div class="ptx-runestone-container"><div class="runestone parsons_section" style="max-width: none;"><div data-component="parsons" class="parsons" id="rs-number-theory-proof">
+<details class="source-view"><summary class="source-view__link" data-reveal-label="Open" data-close-label="Close">View Source for exercise</summary><article class="view-source-view__content"><pre><code class="language-xml">&lt;exercise label="number-theory-proof" adaptive="yes"&gt;
+  &lt;title&gt;Parsons Problem, Mathematical Proof&lt;/title&gt;
+  &lt;idx&gt;even numbers&lt;/idx&gt;
+  &lt;statement&gt;
+    &lt;p&gt;
+      Create a proof of the theorem: If &lt;m&gt;n&lt;/m&gt; is an even number,
+      then &lt;m&gt;n\equiv 0\mod 2&lt;/m&gt;.
+    &lt;/p&gt;
+  &lt;/statement&gt;
+  &lt;blocks&gt;
+  &lt;block order="2"&gt;
+  &lt;p&gt;
+    Suppose &lt;m&gt;n&lt;/m&gt; is even.
+  &lt;/p&gt;
+  &lt;/block&gt;
+  &lt;block order="3"&gt;
+  &lt;choice&gt;
+  &lt;p&gt;
+    Then &lt;m&gt;n&lt;/m&gt; is a prime number.
+  &lt;/p&gt;
+  &lt;/choice&gt;
+  &lt;choice correct="yes"&gt;
+  &lt;p&gt;
+    Then there exists an &lt;m&gt;m&lt;/m&gt; so that &lt;m&gt;n = 2m&lt;/m&gt;.
+  &lt;/p&gt;
+  &lt;/choice&gt;
+  &lt;choice&gt;
+  &lt;p&gt;
+    Then there exists an &lt;m&gt;m&lt;/m&gt; so that &lt;m&gt;n = 2m + 1&lt;/m&gt;.
+  &lt;/p&gt;
+  &lt;/choice&gt;
+  &lt;/block&gt;
+  &lt;block order="1" correct="no"&gt;
+  &lt;p&gt;
+    Click the heels of your ruby slippers together three times.
+  &lt;/p&gt;
+  &lt;/block&gt;
+  &lt;block order="5"&gt;
+  &lt;p&gt;
+    So we have the displayed equation:
+    &lt;me&gt;
+      n = 2m + 0
+    &lt;/me&gt;.
+  &lt;/p&gt;
+  &lt;p&gt;
+    This is a superfluous second paragraph in this block.
+  &lt;/p&gt;
+  &lt;/block&gt;
+  &lt;block order="4"&gt;
+  &lt;p&gt;
+    Thus &lt;m&gt;n\equiv 0\mod 2&lt;/m&gt;.
+  &lt;/p&gt;
+  &lt;/block&gt;
+  &lt;/blocks&gt;
+  &lt;hint&gt;
+    &lt;p&gt;
+      Dorothy will not be much help with this proof.
+    &lt;/p&gt;
+  &lt;/hint&gt;
+&lt;/exercise&gt;
+</code></pre></article></details><div class="ptx-runestone-container"><div class="runestone parsons_section" style="max-width: none;"><div data-component="parsons" class="parsons" id="rs-number-theory-proof">
 <div class="parsons_question parsons-text"><div class="para" id="number-theory-proof-3-1">Create a proof of the theorem: If <span class="process-math">\(n\)</span> is an even number, then <span class="process-math">\(n\equiv 0\mod 2\text{.}\)</span>
 </div></div>
 <pre class="parsonsblocks" data-question_label="" style="visibility: hidden;" data-language="natural" data-adaptive="true" data-noindent="true"><div class="para" id="number-theory-proof-4-1-1">Suppose <span class="process-math">\(n\)</span> is even.</div>
@@ -266,7 +614,14 @@ n = 2m + 0\text{.}
 <div class="para" id="number-theory-proof-4-5-1">Thus <span class="process-math">\(n\equiv 0\mod 2\text{.}\)</span>
 </div></pre>
 </div></div></div>
-<div class="solutions"><details id="number-theory-proof-5" class="hint solution-like born-hidden-knowl"><summary class="knowl__link"><span class="type">Hint</span><span class="period">.</span></summary><div class="hint solution-like knowl__content"><div class="para" id="number-theory-proof-5-1">Dorothy will not be much help with this proof.</div></div></details></div></article></section><div class="para" id="section-1-10">Finally, many authors have already written <a class="external" href="https://www.desmos.com/" target="_blank">Desmos</a><details class="ptx-footnote" aria-live="polite" id="section-1-10-2"><summary class="ptx-footnote__number" title="Footnote 1.9"><sup> 9 </sup></summary><div class="ptx-footnote__contents" id="section-1-10-2"><code class="code-inline tex2jax_ignore">www.desmos.com/</code></div></details> or <a class="external" href="https://www.geogebra.org/" target="_blank">Geogebra</a><details class="ptx-footnote" aria-live="polite" id="section-1-10-4"><summary class="ptx-footnote__number" title="Footnote 1.10"><sup> 10 </sup></summary><div class="ptx-footnote__contents" id="section-1-10-4"><code class="code-inline tex2jax_ignore">www.geogebra.org/</code></div></details> or similar interactives for students. These can easily be included into PreTeXt as well.</div>
+<div class="solutions"><details id="number-theory-proof-5" class="hint solution-like born-hidden-knowl"><summary class="knowl__link"><span class="type">Hint</span><span class="period">.</span></summary><div class="hint solution-like knowl__content">
+<details class="source-view"><summary class="source-view__link" data-reveal-label="Open" data-close-label="Close">View Source for hint</summary><article class="view-source-view__content"><pre><code class="language-xml">&lt;hint&gt;
+  &lt;p&gt;
+    Dorothy will not be much help with this proof.
+  &lt;/p&gt;
+&lt;/hint&gt;
+</code></pre></article></details><div class="para" id="number-theory-proof-5-1">Dorothy will not be much help with this proof.</div>
+</div></details></div></article></section><div class="para" id="section-1-10">Finally, many authors have already written <a class="external" href="https://www.desmos.com/" target="_blank">Desmos</a><details class="ptx-footnote" aria-live="polite" id="section-1-10-2"><summary class="ptx-footnote__number" title="Footnote 1.9"><sup> 9 </sup></summary><div class="ptx-footnote__contents" id="section-1-10-2"><code class="code-inline tex2jax_ignore">www.desmos.com/</code></div></details> or <a class="external" href="https://www.geogebra.org/" target="_blank">Geogebra</a><details class="ptx-footnote" aria-live="polite" id="section-1-10-4"><summary class="ptx-footnote__number" title="Footnote 1.10"><sup> 10 </sup></summary><div class="ptx-footnote__contents" id="section-1-10-4"><code class="code-inline tex2jax_ignore">www.geogebra.org/</code></div></details> or similar interactives for students. These can easily be included into PreTeXt as well.</div>
 <iframe src="https://www.desmos.com/calculator/jyhgnzacnq" id="section-1-11" width="600" height="400"></iframe></section></div>
 <div class="ptx-content-footer">
 <a class="previous-button button" href="shorttitlelowercase-2.html" title="Previous"><span xmlns:xlink="http://www.w3.org/1999/xlink" class="icon material-symbols-outlined" aria-hidden="true">&#xe5cb;</span><span class="name">Prev</span></a><a class="top-button button" href="#" title="Top"><span xmlns:xlink="http://www.w3.org/1999/xlink" class="icon material-symbols-outlined" aria-hidden="true">&#xe5ce;</span><span class="name">Top</span></a><span class="next-button button disabled"><span class="name">Next</span><span xmlns:xlink="http://www.w3.org/1999/xlink" class="icon material-symbols-outlined" aria-hidden="true">&#xe5cc;</span></span>
